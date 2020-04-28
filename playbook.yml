@@ -1,0 +1,24 @@
+---
+- hosts: all
+
+  tasks:
+    # - name: Run apt update
+    #   command: apt update
+    #   become: true
+
+    # - name: Install tools
+    #   command: apt install vim telnet -y
+    #   become: true
+    
+    - name: Check if Docker is installed
+      command: docker --version
+      register: try_run_docker
+      ignore_errors: yes
+
+    - name: Install Docker
+      include_tasks: ./tasks/install_docker.yml
+      when: try_run_docker is failed
+
+    
+
+     
