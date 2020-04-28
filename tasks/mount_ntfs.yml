@@ -1,0 +1,32 @@
+- name: Install tools
+  include_tasks: ./tasks/check_and_install.yml
+  loop:
+    - ntfs-3g
+
+- name: Create a disk mount directory
+  file:
+    path: /mnt/hdd1
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+
+## Mount internal Windows partition with linux compatible permissions,
+## i.e. 755 for directories (dmask=022) and 644 for files (fmask=133)
+## more reading: https://wiki.archlinux.org/index.php/NTFS-3G
+
+- name: Add entry in /etc/fstab
+  mount:
+    path: /mnt/hdd1
+    src: UUID=48C63F51C63F3F0E
+    fstype: ntfs-3g
+    state: present
+    opts: uid=pi,gid=pi,dmask=022,fmask=133, exec
+  become: true
+  register: edit_fstab
+
+- name: Reboot the system
+  reboot:
+  become: true
+  when: edit_fstab.changed

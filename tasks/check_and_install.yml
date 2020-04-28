@@ -1,0 +1,9 @@
+- name: Check if {{ item }} is installed
+  command: which {{ item }}
+  ignore_errors: yes
+  register: check_application
+
+- name: Install {{ item }}
+  command: apt install {{ item }} -y
+  become: true
+  when: check_application is failed

@@ -7,18 +7,21 @@
     #   become: true
 
     # - name: Install tools
-    #   command: apt install vim telnet -y
-    #   become: true
-    
-    - name: Check if Docker is installed
-      command: docker --version
-      register: try_run_docker
-      ignore_errors: yes
+    #   include_tasks: ./tasks/check_and_install.yml
+    #   loop:
+    #     - vim
+    #     - telnet
 
-    - name: Install Docker
-      include_tasks: ./tasks/install_docker.yml
-      when: try_run_docker is failed
+    # - name: Check if Docker is installed
+    #   command: docker --version
+    #   register: try_run_docker
+    #   ignore_errors: yes
 
-    
+    # - name: Install Docker
+    #   include_tasks: ./tasks/install_docker.yml
+    #   when: try_run_docker is failed
 
-     
+    - name: Mount ntfs hdd
+      include_tasks: ./tasks/mount-ntfs.yml
+
+    - name: Docker applications
