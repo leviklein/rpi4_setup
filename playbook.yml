@@ -21,7 +21,8 @@
     #   include_tasks: ./tasks/install_docker.yml
     #   when: try_run_docker is failed
 
-    - name: Mount ntfs hdd
-      include_tasks: ./tasks/mount-ntfs.yml
+    # - name: Mount ntfs hdd
+    #   include_tasks: ./tasks/mount-ntfs.yml
 
-    - name: Docker applications
+    - name: Run Docker applications
+      include_tasks: ./tasks/run_docker_compose.yml

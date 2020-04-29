@@ -1,0 +1,56 @@
+- name: Install python3-distutils
+  include_tasks: ./tasks/check_and_install.yml
+  loop:
+    - python3-distutils
+
+- name: Check if pip is installed
+  command: pip --version
+  register: try_run_pip
+  ignore_errors: yes
+
+- name: Install pip
+  include_tasks: ./tasks/install_pip.yml
+  when: try_run_pip is failed
+
+- name: Install Docker Compose requirements
+  pip:
+    name:
+      - PyYAML
+      - docker
+      - docker-compose
+
+- name: Run Docker Compose
+  docker_compose:
+    project_name: Raspberry Media Server
+    definition:
+      version: '2'
+      services:
+        plex:
+          image: linuxserver/plex:latest
+          container_name: plex
+          hostname: plex
+          network_mode: host
+          environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Asia/Singapore
+            - VERSION=public
+          volumes:
+            - /mnt/hdd1/.plex/config:/config
+            - /mnt/hdd1/Music:/media/Music
+            - /mnt/hdd1/Video/movies:/media/Movies
+            - /mnt/hdd1/Video/tv series:/media/TV Shows
+          restart: unless-stopped
+        # prometheus:
+        #   image: prom/prometheus:latest
+        #   container_name: prometheus
+        #   ports:
+        #     - 9090:9090
+        #   command:
+        #     - --config.file=/etc/prometheus/prometheus.yml
+        #     - --storage.tsdb.path=/prometheus
+        #     - --web.console.libraries=/usr/share/prometheus/console_libraries
+        #     - --web.console.templates=/usr/share/prometheus/consoles
+        #     - --storage.tsdb.retention.size=1GB
+
+
