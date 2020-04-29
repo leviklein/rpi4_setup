@@ -1,0 +1,13 @@
+- name: Download pip script
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: ./get-pip.py
+
+- name: Install pip
+  command: python3 get-pip.py
+  become: true
+
+- name: Remove pip script
+  file:
+    path: ./get-pip.py
+    state: absent

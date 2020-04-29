@@ -1,4 +1,4 @@
-- name: Install tools
+- name: Install ntfs-3g
   include_tasks: ./tasks/check_and_install.yml
   loop:
     - ntfs-3g

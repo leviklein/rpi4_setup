@@ -1,17 +1,17 @@
 - name: Download Docker script
-  get_url: 
+  get_url:
     url: https://get.docker.com
-    dest: get-docker.sh
+    dest: ./get-docker.sh
 
 - name: Install Docker
   command: sh get-docker.sh
   become: true
 
-- name: Add docker user to rpi group 
+- name: Add docker user to rpi group
   command: usermod -aG docker pi
   become: true
 
 - name: Remove Docker script
   file:
-    path: get-docker.sh
+    path: ./get-docker.sh
     state: absent
