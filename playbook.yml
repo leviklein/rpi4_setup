@@ -1,6 +1,9 @@
 ---
 - hosts: all
 
+  vars:
+    apps_to_restart: []
+
   tasks:
     # - name: Run apt update
     #   command: apt update
@@ -26,3 +29,29 @@
 
     - name: Run Docker applications
       include_tasks: ./tasks/run_docker_compose.yml
+
+
+  handlers:
+    - name: Run Docker Compose
+      docker_compose:
+        project_name: Raspberry Media Server
+        project_src: ~/.ansible/compose/
+        remove_orphans: true
+
+    - name: Set nginx to restart
+      set_fact: 
+        apps_to_restart: "{{ apps_to_restart + [ 'nginx' ] }}"
+
+    - name: Set transmission to restart
+      set_fact: 
+        apps_to_restart: "{{ apps_to_restart + [ 'transmission' ] }}"
+
+    - name: Restart services
+      docker_compose:
+        project_name: Raspberry Media Server
+        project_src: ~/.ansible/compose/
+        restarted: true
+        services: "{{ apps_to_restart }}"
+      listen:
+        - Restart nginx 
+        - Restart transmission

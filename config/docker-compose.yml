@@ -1,0 +1,75 @@
+version: '2'
+services:
+  plex:
+    image: linuxserver/plex:latest
+    container_name: plex
+    hostname: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Singapore
+      - VERSION=public
+    volumes:
+      - /mnt/hdd1/.plex/config:/config
+      - /mnt/hdd1/Music:/media/Music
+      - /mnt/hdd1/Video/movies:/media/Movies
+      - /mnt/hdd1/Video/tv series:/media/TV Shows
+    restart: unless-stopped
+
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Singapore
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+      # - USER=username #optional
+      # - PASS=password #optional
+    volumes:
+      - /mnt/hdd1/.transmission/config:/config
+      - /mnt/hdd1/torrent_temp:/Downloads
+      - /mnt/hdd1/.transmission/watch:/watch
+    ports:
+      - 51413:51413/tcp
+      - 51413:51413/udp
+    restart: unless-stopped
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - /mnt/hdd1/.nginx/config/nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Singapore
+    volumes:
+      - /mnt/hdd1/.radarr/config:/config
+      - /mnt/hdd1:/disk/hdd1
+    restart: unless-stopped
+    
+  ubuntu:
+    image: ubuntu
+    command: tail -f /dev/null
+    # container_name: ubuntu
+
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   ports:
+  #     - 9090:9090
+  #   command:
+  #     - --config.file=/etc/prometheus/prometheus.yml
+  #     - --storage.tsdb.path=/prometheus
+  #     - --web.console.libraries=/usr/share/prometheus/console_libraries
+  #     - - -web.console.templates=/usr/share/prometheus/consoles
+  #     - --storage.tsdb.retention.size=1GB

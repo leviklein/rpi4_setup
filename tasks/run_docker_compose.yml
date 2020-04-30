@@ -19,38 +19,21 @@
       - docker
       - docker-compose
 
-- name: Run Docker Compose
-  docker_compose:
-    project_name: Raspberry Media Server
-    definition:
-      version: '2'
-      services:
-        plex:
-          image: linuxserver/plex:latest
-          container_name: plex
-          hostname: plex
-          network_mode: host
-          environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=Asia/Singapore
-            - VERSION=public
-          volumes:
-            - /mnt/hdd1/.plex/config:/config
-            - /mnt/hdd1/Music:/media/Music
-            - /mnt/hdd1/Video/movies:/media/Movies
-            - /mnt/hdd1/Video/tv series:/media/TV Shows
-          restart: unless-stopped
-        # prometheus:
-        #   image: prom/prometheus:latest
-        #   container_name: prometheus
-        #   ports:
-        #     - 9090:9090
-        #   command:
-        #     - --config.file=/etc/prometheus/prometheus.yml
-        #     - --storage.tsdb.path=/prometheus
-        #     - --web.console.libraries=/usr/share/prometheus/console_libraries
-        #     - --web.console.templates=/usr/share/prometheus/consoles
-        #     - --storage.tsdb.retention.size=1GB
+- name: Copy nginx config to remote
+  copy:
+    src: ./config/nginx.conf
+    dest: /mnt/hdd1/.nginx/config/
+  notify: Restart nginx
 
+- name: Copy transmission config to remote
+  copy:
+    src: ./config/transmission.json
+    dest: /mnt/hdd1/.transmission/config/settings.json
+  notify: Restart transmission
+
+- name: Copy docker-compose.yml to remote
+  copy:
+    src: ./config/docker-compose.yml
+    dest: ~/.ansible/compose/
+  notify: Run Docker Compose
 
