@@ -1,0 +1,19 @@
+- name: Wait until jackett server settings is created
+  wait_for:
+    path: /mnt/hdd1/.jackett/config/Jackett/ServerConfig.json
+
+- name: Fix BasePathOverride in jackett server settings
+  lineinfile:
+    path: /mnt/hdd1/.jackett/config/Jackett/ServerConfig.json
+    regexp: '(  "BasePathOverride":) null'
+    line: '\1 "/jackett",'
+    backrefs: yes
+  notify: Set jackett to restart
+
+- name: Fix UpdateDisabled in jackett server settings
+  lineinfile:
+    path: /mnt/hdd1/.jackett/config/Jackett/ServerConfig.json
+    regexp: '(  "UpdateDisabled":) false'
+    line: '\1 true,'
+    backrefs: yes
+  notify: Set jackett to restart

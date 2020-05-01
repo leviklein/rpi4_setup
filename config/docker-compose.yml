@@ -1,4 +1,4 @@
-version: '2'
+version: '2.3'
 services:
   plex:
     image: linuxserver/plex:latest
@@ -24,9 +24,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Singapore
-      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
-      # - USER=username #optional
-      # - PASS=password #optional
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #options: /combustion-release/, /kettu/, /transmission-web-control/
     volumes:
       - /mnt/hdd1/.transmission/config:/config
       - /mnt/hdd1/torrent_temp:/Downloads
@@ -56,11 +54,36 @@ services:
       - /mnt/hdd1/.radarr/config:/config
       - /mnt/hdd1:/disk/hdd1
     restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Singapore
+    volumes:
+      - /mnt/hdd1/.sonarr/config:/config
+      - /mnt/hdd1:/disk/hdd1
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Singapore
+    volumes:
+      - /mnt/hdd1/.jackett/config:/config
+      - /mnt/hdd1/torrent_temp:/Downloads
+    restart: unless-stopped
     
-  ubuntu:
-    image: ubuntu
-    command: tail -f /dev/null
-    # container_name: ubuntu
+  # ubuntu:
+  #   image: ubuntu
+  #   command: tail -f /dev/null
 
   # prometheus:
   #   image: prom/prometheus:latest

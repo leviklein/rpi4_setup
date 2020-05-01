@@ -23,13 +23,13 @@
   copy:
     src: ./config/nginx.conf
     dest: /mnt/hdd1/.nginx/config/
-  notify: Restart nginx
+  notify: Set nginx to restart
 
 - name: Copy transmission config to remote
   copy:
     src: ./config/transmission.json
     dest: /mnt/hdd1/.transmission/config/settings.json
-  notify: Restart transmission
+  notify: Set transmission to restart
 
 - name: Copy docker-compose.yml to remote
   copy:

@@ -1,0 +1,12 @@
+- name: Wait until sonarr server settings is created
+  wait_for:
+    path: /mnt/hdd1/.sonarr/config/config.xml
+    delay: 5
+
+- name: Fix UrlBase in sonarr server settings
+  lineinfile:
+    path: /mnt/hdd1/.sonarr/config/config.xml
+    regexp: '  <UrlBase></UrlBase>'
+    line: '  <UrlBase>sonarr</UrlBase>'
+    backrefs: yes
+  notify: Set sonarr to restart

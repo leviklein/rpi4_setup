@@ -1,6 +1,8 @@
 ---
 - hosts: all
 
+  force_handlers: True
+
   vars:
     apps_to_restart: []
 
@@ -30,6 +32,12 @@
     - name: Run Docker applications
       include_tasks: ./tasks/run_docker_compose.yml
 
+  post_tasks:
+    - name: Edit jackett server settings #ran here to preserve API key
+      include_tasks: config/jackett.yml
+
+    - name: Edit sonarr server settings #ran here to preserve API key
+      include_tasks: config/sonarr.yml
 
   handlers:
     - name: Run Docker Compose
@@ -46,6 +54,14 @@
       set_fact: 
         apps_to_restart: "{{ apps_to_restart + [ 'transmission' ] }}"
 
+    - name: Set jackett to restart
+      set_fact: 
+        apps_to_restart: "{{ apps_to_restart + [ 'jackett' ] }}"
+
+    - name: Set sonarr to restart
+      set_fact: 
+        apps_to_restart: "{{ apps_to_restart + [ 'sonarr' ] }}"
+
     - name: Restart services
       docker_compose:
         project_name: Raspberry Media Server
@@ -53,5 +69,7 @@
         restarted: true
         services: "{{ apps_to_restart }}"
       listen:
-        - Restart nginx 
-        - Restart transmission
+        - Set nginx to restart
+        - Set transmission to restart
+        - Set jackett to restart
+        - Set sonarr to restart
