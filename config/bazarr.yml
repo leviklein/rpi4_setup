@@ -1,0 +1,47 @@
+- name: Wait until bazarr server settings is created
+  wait_for:
+    path: /mnt/hdd1/.bazarr/config/config/config.ini
+
+- name: Set bazarr general server settings
+  ini_file:
+    path: /mnt/hdd1/.bazarr/config/config/config.ini
+    section: general
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  notify: Set bazarr to restart
+  with_items:
+    - { option: base_url, value:  /bazarr/ }
+    - { option: auto_update, value: False }
+    - { option: use_sonarr, value: True }
+    - { option: use_radarr, value: True }
+    - { option: enabled_providers, value: "bsplayer,podnapisi,subscenter,supersubtitles,tvsubtitles" }
+    - { option: upgrade_subs, value: True }
+    - { option: serie_default_enabled, value: True }
+    - { option: serie_default_language, value: ['en'] }
+    - { option: movie_default_enabled, value: True }
+    - { option: movie_default_language, value: ['en'] }
+
+- name: Set bazarr sonarr server settings
+  ini_file:
+    path: /mnt/hdd1/.bazarr/config/config/config.ini
+    section: sonarr
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  notify: Set bazarr to restart
+  with_items:
+    - { option: ip, value:  sonarr }
+    - { option: base_url, value:  /sonarr }
+    - { option: apikey, value:  "{{ sonarr_config.matches[0].ApiKey }}" }
+
+
+- name: Set bazarr radarr server settings
+  ini_file:
+    path: /mnt/hdd1/.bazarr/config/config/config.ini
+    section: radarr
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  notify: Set bazarr to restart
+  with_items:
+    - { option: ip, value:  radarr }
+    - { option: base_url, value:  /radarr }
+    - { option: apikey, value:  "{{ radarr_config.matches[0].ApiKey }}" }

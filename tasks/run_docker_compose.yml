@@ -1,16 +1,11 @@
-- name: Install python3-distutils
-  include_tasks: ./tasks/check_and_install.yml
-  loop:
-    - python3-distutils
-
-- name: Check if pip is installed
-  command: pip --version
-  register: try_run_pip
-  ignore_errors: yes
-
-- name: Install pip
-  include_tasks: ./tasks/install_pip.yml
-  when: try_run_pip is failed
+- name: Install required tools
+  apt:
+    name: 
+      - python3-distutils
+      - python3-venv 
+      - python3-pip
+      - libxslt-dev
+  become: true
 
 - name: Install Docker Compose requirements
   pip:
@@ -18,6 +13,21 @@
       - PyYAML
       - docker
       - docker-compose
+      - lxml
+
+- name: Copy docker-compose.yml to remote
+  copy:
+    src: ./config/docker-compose.yml
+    dest: ~/.ansible/compose/
+  notify: Run Docker Compose
+
+- meta: flush_handlers # run compose if needed
+
+# config management
+
+- name: Wait until config files are created
+  wait_for:
+    timeout: 10
 
 - name: Copy nginx config to remote
   copy:
@@ -31,9 +41,14 @@
     dest: /mnt/hdd1/.transmission/config/settings.json
   notify: Set transmission to restart
 
-- name: Copy docker-compose.yml to remote
-  copy:
-    src: ./config/docker-compose.yml
-    dest: ~/.ansible/compose/
-  notify: Run Docker Compose
+- name: Edit radarr server settings
+  include_tasks: config/radarr.yml
 
+- name: Edit sonarr server settings
+  include_tasks: config/sonarr.yml
+
+- name: Edit jackett server settings
+  include_tasks: config/jackett.yml
+
+- name: Edit bazarr server settings
+  include_tasks: config/bazarr.yml

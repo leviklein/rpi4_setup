@@ -1,0 +1,17 @@
+- name: Wait until radarr server settings is created
+  wait_for:
+    path: /mnt/hdd1/.radarr/config/config.xml
+
+- name: Set UrlBase in radarr server settings
+  xml:
+    path: /mnt/hdd1/.radarr/config/config.xml
+    xpath: /Config/UrlBase
+    value: radarr
+  notify: Set radarr to restart
+
+- name: Extract API key from radarr server settings
+  xml:
+    path: /mnt/hdd1/.radarr/config/config.xml
+    xpath: /Config/ApiKey
+    content: text
+  register: radarr_config

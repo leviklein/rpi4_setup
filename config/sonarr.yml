@@ -1,12 +1,17 @@
 - name: Wait until sonarr server settings is created
   wait_for:
     path: /mnt/hdd1/.sonarr/config/config.xml
-    delay: 5
 
-- name: Fix UrlBase in sonarr server settings
-  lineinfile:
+- name: Set UrlBase in sonarr server settings
+  xml:
     path: /mnt/hdd1/.sonarr/config/config.xml
-    regexp: '  <UrlBase></UrlBase>'
-    line: '  <UrlBase>sonarr</UrlBase>'
-    backrefs: yes
+    xpath: /Config/UrlBase
+    value: sonarr
   notify: Set sonarr to restart
+
+- name: Extract API key from sonarr server settings
+  xml:
+    path: /mnt/hdd1/.sonarr/config/config.xml
+    xpath: /Config/ApiKey
+    content: text
+  register: sonarr_config

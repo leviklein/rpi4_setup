@@ -80,6 +80,18 @@ services:
       - /mnt/hdd1/.jackett/config:/config
       - /mnt/hdd1/torrent_temp:/Downloads
     restart: unless-stopped
+
+  bazarr:
+    image: linuxserver/bazarr
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Singapore
+    volumes:
+      - /mnt/hdd1/.bazarr/config:/config
+      - /mnt/hdd1:/disk/hdd1
+    restart: unless-stopped
     
   # ubuntu:
   #   image: ubuntu
