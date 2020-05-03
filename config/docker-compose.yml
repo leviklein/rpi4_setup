@@ -8,7 +8,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Asia/Singapore
+      - TZ=Asia/Manila
       - VERSION=public
     volumes:
       - /mnt/hdd1/.plex/config:/config
@@ -23,7 +23,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Asia/Singapore
+      - TZ=Asia/Manila
       - TRANSMISSION_WEB_HOME=/combustion-release/ #options: /combustion-release/, /kettu/, /transmission-web-control/
     volumes:
       - /mnt/hdd1/.transmission/config:/config
@@ -49,7 +49,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Asia/Singapore
+      - TZ=Asia/Manila
     volumes:
       - /mnt/hdd1/.radarr/config:/config
       - /mnt/hdd1:/disk/hdd1
@@ -61,7 +61,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Asia/Singapore
+      - TZ=Asia/Manila
     volumes:
       - /mnt/hdd1/.sonarr/config:/config
       - /mnt/hdd1:/disk/hdd1
@@ -75,7 +75,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Asia/Singapore
+      - TZ=Asia/Manila
     volumes:
       - /mnt/hdd1/.jackett/config:/config
       - /mnt/hdd1/torrent_temp:/Downloads
@@ -87,12 +87,31 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Asia/Singapore
+      - TZ=Asia/Manila
     volumes:
       - /mnt/hdd1/.bazarr/config:/config
       - /mnt/hdd1:/disk/hdd1
     restart: unless-stopped
-    
+
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    environment:
+      TZ: Asia/Manila
+      VIRTUAL_HOST: 'rpi4.cloud'
+    volumes:
+      - ~/.pihole/etc-pihole/:/etc/pihole/
+      - ~/.pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 8080:80/tcp
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    restart: unless-stopped
+
   # ubuntu:
   #   image: ubuntu
   #   command: tail -f /dev/null
