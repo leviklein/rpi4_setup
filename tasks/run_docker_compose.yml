@@ -1,8 +1,8 @@
 - name: Install required tools
   apt:
-    name: 
+    name:
       - python3-distutils
-      - python3-venv 
+      - python3-venv
       - python3-pip
       - libxslt-dev
   become: true
@@ -15,6 +15,15 @@
       - docker-compose
       - lxml
 
+- name: Create pihole config directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - ~/.pihole/etc-pihole
+    - ~/.pihole/etc-dnsmasq.d
+
 - name: Copy docker-compose.yml to remote
   copy:
     src: ./config/docker-compose.yml
@@ -25,21 +34,20 @@
 
 # config management
 
-- name: Wait until config files are created
-  wait_for:
-    timeout: 10
-
 - name: Copy nginx config to remote
   copy:
     src: ./config/nginx.conf
     dest: /mnt/hdd1/.nginx/config/
   notify: Set nginx to restart
 
-- name: Copy transmission config to remote
+- name: Edit transmission config
+  include_tasks: config/transmission.yml
+
+- name: Copy pihole-dnsmasq config to remote
   copy:
-    src: ./config/transmission.json
-    dest: /mnt/hdd1/.transmission/config/settings.json
-  notify: Set transmission to restart
+    src: ./config/dnsmasq.conf
+    dest: ~/.pihole/etc-dnsmasq.d/02-rpihostname.conf
+  notify: Set pihole to restart
 
 - name: Edit radarr server settings
   include_tasks: config/radarr.yml

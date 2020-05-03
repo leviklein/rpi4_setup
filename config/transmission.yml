@@ -1,0 +1,14 @@
+- name: Check if transmission config is the same in remote
+  copy:
+    src: ./config/transmission.json
+    dest: /mnt/hdd1/.transmission/config/settings.json
+  notify: Set transmission to stop
+  check_mode: true
+
+- meta: flush_handlers
+
+- name: Copy transmission config to remote
+  copy:
+    src: ./config/transmission.json
+    dest: /mnt/hdd1/.transmission/config/settings.json
+  notify: Set transmission to restart
