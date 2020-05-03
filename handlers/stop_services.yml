@@ -1,0 +1,12 @@
+- name: Set transmission to stop
+  set_fact:
+    apps_to_stop: "{{ apps_to_stop + [ 'transmission' ] }}"
+
+- name: Stop services
+  docker_compose:
+    project_name: Raspberry Media Server
+    project_src: ~/.ansible/compose/
+    stopped: true
+    services: "{{ apps_to_stop }}"
+  listen:
+    - Set transmission to stop

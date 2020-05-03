@@ -1,0 +1,42 @@
+- name: Set nginx to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'nginx' ] }}"
+
+- name: Set transmission to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'transmission' ] }}"
+
+- name: Set radarr to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'radarr' ] }}"
+
+- name: Set sonarr to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'sonarr' ] }}"
+
+- name: Set jackett to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'jackett' ] }}"
+
+- name: Set bazarr to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'bazarr' ] }}"
+
+- name: Set pihole to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'pihole' ] }}"
+
+- name: Restart services
+  docker_compose:
+    project_name: Raspberry Media Server
+    project_src: ~/.ansible/compose/
+    restarted: true
+    services: "{{ apps_to_restart }}"
+  listen:
+    - Set nginx to restart
+    - Set transmission to restart
+    - Set radarr to restart
+    - Set sonarr to restart
+    - Set jackett to restart
+    - Set bazarr to restart
+    - Set pihole to restart

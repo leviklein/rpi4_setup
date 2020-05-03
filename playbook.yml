@@ -5,6 +5,7 @@
 
   vars:
     apps_to_restart: []
+    apps_to_stop: []
 
   tasks:
     # - name: Install tools
@@ -14,7 +15,7 @@
     #       - telnet
     #     update_cache: yes
     #   become: true
-        
+
     # - name: Check if Docker is installed
     #   command: docker --version
     #   register: try_run_docker
@@ -38,40 +39,11 @@
         project_src: ~/.ansible/compose/
         remove_orphans: true
 
-    - name: Set nginx to restart
-      set_fact: 
-        apps_to_restart: "{{ apps_to_restart + [ 'nginx' ] }}"
-
-    - name: Set transmission to restart
-      set_fact: 
-        apps_to_restart: "{{ apps_to_restart + [ 'transmission' ] }}"
-
-    - name: Set radarr to restart
-      set_fact: 
-        apps_to_restart: "{{ apps_to_restart + [ 'radarr' ] }}"
-
-    - name: Set sonarr to restart
-      set_fact: 
-        apps_to_restart: "{{ apps_to_restart + [ 'sonarr' ] }}"
-
-    - name: Set jackett to restart
-      set_fact: 
-        apps_to_restart: "{{ apps_to_restart + [ 'jackett' ] }}"
-
-    - name: Set bazarr to restart
-      set_fact: 
-        apps_to_restart: "{{ apps_to_restart + [ 'bazarr' ] }}"
-
-    - name: Restart services
-      docker_compose:
-        project_name: Raspberry Media Server
-        project_src: ~/.ansible/compose/
-        restarted: true
-        services: "{{ apps_to_restart }}"
+    - name: Wait until config files are created
+      wait_for:
+        timeout: 10
       listen:
-        - Set nginx to restart
-        - Set transmission to restart
-        - Set radarr to restart
-        - Set sonarr to restart
-        - Set jackett to restart
-        - Set bazarr to restart
+        - Run Docker Compose
+
+    - import_tasks: handlers/stop_services.yml
+    - import_tasks: handlers/restart_services.yml
