@@ -43,11 +43,8 @@
 - name: Edit transmission config
   include_tasks: config/transmission.yml
 
-- name: Copy pihole-dnsmasq config to remote
-  copy:
-    src: ./config/dnsmasq.conf
-    dest: ~/.pihole/etc-dnsmasq.d/02-rpihostname.conf
-  notify: Set pihole to restart
+- name: Edit pihole dns config
+  include_tasks: config/pihole-dns.yml
 
 - name: Edit radarr server settings
   include_tasks: config/radarr.yml

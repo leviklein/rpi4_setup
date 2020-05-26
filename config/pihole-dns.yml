@@ -1,0 +1,7 @@
+- name: Add local dns records for this host
+  lineinfile:
+    path: /home/pi/.pihole/etc-pihole/custom.list 
+    line: "{{ item.0.ip }} {{ item.1 }}"
+  with_subelements:
+    - "{{ dns_hostnames }}"
+    - hostnames
