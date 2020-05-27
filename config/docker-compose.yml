@@ -112,6 +112,16 @@ services:
       - 1.1.1.1
     restart: unless-stopped
 
+  raspotify:
+    image: levikleinm/raspotify-docker
+    container_name: raspotify
+    network_mode: host
+    environment:
+      BITRATE: 320
+      DEVICE_NAME: "Raspberry Pi 4"
+    devices:
+      - /dev/snd:/dev/snd
+
   # ubuntu:
   #   image: ubuntu
   #   command: tail -f /dev/null
