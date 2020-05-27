@@ -20,9 +20,12 @@
     path: "{{ item }}"
     state: directory
     mode: '0755'
+    owner: pi
+    group: pi
+  become: true
   loop:
-    - ~/.pihole/etc-pihole
-    - ~/.pihole/etc-dnsmasq.d
+    - /home/pi/.pihole/etc-pihole
+    - /home/pi/.pihole/etc-dnsmasq.d
 
 - name: Copy docker-compose.yml to remote
   copy:
