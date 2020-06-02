@@ -121,6 +121,7 @@ services:
       DEVICE_NAME: "Raspberry Pi 4"
     devices:
       - /dev/snd:/dev/snd
+    restart: unless-stopped
 
   # ubuntu:
   #   image: ubuntu
