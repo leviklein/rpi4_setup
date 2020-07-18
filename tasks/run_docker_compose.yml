@@ -28,6 +28,7 @@
     - /home/pi/.pihole/etc-dnsmasq.d
     - /home/pi/.prometheus/etc-prometheus
     - /home/pi/.prometheus/data
+    - /home/pi/.grafana
 
 - name: Copy docker-compose.yml to remote
   copy:

@@ -145,11 +145,14 @@ services:
     user: "1000"
     restart: unless-stopped
 
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: grafana
-  #   volumes:
-  #     - ~/.grafana/:/var/lib/grafana
-  #   user: "1000"
-  #   restart: unless-stopped
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ~/.grafana/:/var/lib/grafana
+    environment:
+      GF_SERVER_ROOT_URL: http://192.168.20.25/grafana
+      GF_SERVER_SERVE_FROM_SUB_PATH: 'true'
+    user: "1000"
+    restart: unless-stopped
 
