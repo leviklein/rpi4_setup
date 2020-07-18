@@ -26,6 +26,10 @@
   set_fact:
     apps_to_restart: "{{ apps_to_restart + [ 'pihole' ] }}"
 
+- name: Set prometheus to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'prometheus' ] }}"
+
 - name: Restart services
   docker_compose:
     project_name: Raspberry Media Server
@@ -40,3 +44,4 @@
     - Set jackett to restart
     - Set bazarr to restart
     - Set pihole to restart
+    - Set prometheus to restart

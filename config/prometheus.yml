@@ -1,0 +1,5 @@
+- name: Copy prometheus config to remote
+  copy:
+    src: ./config/files/prometheus.yml
+    dest: /home/pi/.prometheus/etc-prometheus/prometheus.yml
+  notify: Set prometheus to restart

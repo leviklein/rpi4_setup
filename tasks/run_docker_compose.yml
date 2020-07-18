@@ -15,7 +15,7 @@
       - docker-compose
       - lxml
 
-- name: Create pihole config directories
+- name: Create config directories
   file:
     path: "{{ item }}"
     state: directory
@@ -26,6 +26,8 @@
   loop:
     - /home/pi/.pihole/etc-pihole
     - /home/pi/.pihole/etc-dnsmasq.d
+    - /home/pi/.prometheus/etc-prometheus
+    - /home/pi/.prometheus/data
 
 - name: Copy docker-compose.yml to remote
   copy:
@@ -60,3 +62,6 @@
 
 - name: Edit bazarr server settings
   include_tasks: config/bazarr.yml
+
+- name: Edit prometheus server settings
+  include_tasks: config/prometheus.yml
