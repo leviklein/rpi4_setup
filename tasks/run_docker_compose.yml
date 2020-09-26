@@ -29,6 +29,7 @@
     - /home/pi/.prometheus/etc-prometheus
     - /home/pi/.prometheus/data
     - /home/pi/.grafana
+    - /home/pi/.blackbox_exporter
 
 - name: Copy docker-compose.yml to remote
   copy:
@@ -66,3 +67,6 @@
 
 - name: Edit prometheus server settings
   include_tasks: config/prometheus.yml
+
+- name: Edit blackbox-exporter settings
+  include_tasks: config/blackbox-exporter.yml

@@ -1,0 +1,5 @@
+- name: Copy blackbox-exporter config to remote
+  copy:
+    src: ./config/files/blackbox-exporter.yml
+    dest: /home/pi/.blackbox_exporter/blackbox-exporter.yml
+  notify: Set blackbox-exporter to restart

@@ -1,0 +1,16 @@
+modules:
+  ping:
+    prober: icmp
+    timeout: 5s
+    icmp:
+      preferred_ip_protocol: "ip4"
+
+  http_2xx:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      ip_protocol_fallback: false
+  
+  tcp_connect:
+    prober: tcp
+    timeout: 5s

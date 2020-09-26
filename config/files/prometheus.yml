@@ -27,7 +27,7 @@ scrape_configs:
 
   - job_name: 'node_exporter'
     static_configs:
-    - targets: ['172.17.0.1:9100']
+    - targets: ['172.17.0.1:9100'] # connecting to rpi host itself
 
   - job_name: 'grafana'
     metrics_path: '/grafana/metrics'
@@ -36,3 +36,25 @@ scrape_configs:
       - 'grafana'
       type: 'A'
       port: 3000
+
+  - job_name: 'services_status'
+    metrics_path: /probe
+    params:
+     module: [tcp_connect]
+    static_configs:
+      - targets:
+        - transmission:9091
+        - radarr:7878
+        - sonarr:8989
+        - jackett:9117
+        - bazarr:6767
+        - grafana:3000
+        - pihole:80
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+      

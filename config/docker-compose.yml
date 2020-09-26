@@ -156,3 +156,14 @@ services:
     user: "1000"
     restart: unless-stopped
 
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    container_name: blackbox-exporter
+    volumes:
+      - ~/.blackbox_exporter:/config
+    command:
+      --config.file=/config/blackbox-exporter.yml
+    ports:
+      - 9115:9115
+    restart: unless-stopped
+    privileged: true #for ICMP

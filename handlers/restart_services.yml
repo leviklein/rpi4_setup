@@ -30,6 +30,10 @@
   set_fact:
     apps_to_restart: "{{ apps_to_restart + [ 'prometheus' ] }}"
 
+- name: Set blackbox-exporter to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'blackbox-exporter' ] }}"
+
 - name: Restart services
   docker_compose:
     project_name: Raspberry Media Server
@@ -45,3 +49,4 @@
     - Set bazarr to restart
     - Set pihole to restart
     - Set prometheus to restart
+    - Set blackbox-exporter to restart
