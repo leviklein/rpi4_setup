@@ -30,6 +30,7 @@
     - /home/pi/.prometheus/data
     - /home/pi/.grafana
     - /home/pi/.blackbox_exporter
+    - /home/pi/.homeassistant
 
 - name: Copy docker-compose.yml to remote
   copy:

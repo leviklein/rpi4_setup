@@ -167,3 +167,13 @@ services:
       - 9115:9115
     restart: unless-stopped
     privileged: true #for ICMP
+
+  homeassistant:
+    image: homeassistant/raspberrypi4-homeassistant:stable
+    container_name: homeassistant
+    volumes:
+      - ~/.homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    network_mode: host
+    restart: unless-stopped
+
