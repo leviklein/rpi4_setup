@@ -139,8 +139,8 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/data
       - --storage.tsdb.retention.size=1GB
-      - --web.console.libraries=/opt/prometheus/console_libraries 
-      - --web.console.templates=/opt/prometheus/consoles 
+      - --web.console.libraries=/opt/prometheus/console_libraries
+      - --web.console.templates=/opt/prometheus/consoles
       - --web.route-prefix=/prometheus
     user: "1000"
     restart: unless-stopped
@@ -177,3 +177,33 @@ services:
     network_mode: host
     restart: unless-stopped
 
+  transmission-openvpn:
+    image: haugene/transmission-openvpn
+    container_name: transmission-openvpn
+    ports:
+      - '9091:9091'
+    cap_add:
+      - NET_ADMIN
+    volumes:
+        - /mnt/hdd1/torrent_temp:/data
+        - /mnt/hdd1/.transmission/config/settings.json:/data/transmission-home/settings.json
+        - /mnt/hdd1/torrent_temp:/Downloads
+        - /mnt/hdd1/.transmission/watch:/watch
+    environment:
+        - OPENVPN_PROVIDER=NORDVPN
+        - NORDVPN_COUNTRY=hk
+        - NORDVPN_CATEGORY=P2P
+        - NORDVPN_CATEGORY=tcp
+        - OPENVPN_USERNAME={{ nordvpn_user }}
+        - OPENVPN_PASSWORD={{ nordvpn_pw }}
+        - LOCAL_NETWORK=192.168.20.0/24
+        - PUID=1000
+        - PGID=1000
+        - TZ=Asia/Manila
+        - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
+        - TRANSMISSION_WEB_UI=combustion
+    logging:
+        driver: json-file
+        options:
+            max-size: 10m
+    restart: unless-stopped

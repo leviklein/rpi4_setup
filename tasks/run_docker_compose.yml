@@ -33,7 +33,7 @@
     - /home/pi/.homeassistant
 
 - name: Copy docker-compose.yml to remote
-  copy:
+  template:
     src: ./config/docker-compose.yml
     dest: ~/.ansible/compose/
   notify: Run Docker Compose
