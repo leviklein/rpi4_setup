@@ -1,0 +1,38 @@
+- name: Create custom_components directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: pi
+    group: pi
+  become: true
+  loop:
+  - /home/pi/.homeassistant/custom_components
+  - /home/pi/.homeassistant/downloads
+
+- name: Install localtuya
+  unarchive:
+    src: https://github.com/rospogrigio/localtuya/archive/refs/tags/v3.2.2.zip
+    dest: /home/pi/.homeassistant/downloads
+    remote_src: yes
+
+- name: Move to custom_components folder 
+  copy:
+    src: /home/pi/.homeassistant/downloads/localtuya-3.2.2/custom_components/localtuya
+    dest: /home/pi/.homeassistant/custom_components/
+    remote_src: yes
+
+- name: Remove pip script
+  file:
+    path: /home/pi/.homeassistant/downloads/localtuya-3.2.2
+    state: absent
+
+# - name: Install pip
+#   command: python3 get-pip.py
+#   become: true
+
+# - name: Remove pip script
+#   file:
+#     path: ./get-pip.py
+#     state: absent
+

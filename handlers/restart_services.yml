@@ -34,6 +34,10 @@
   set_fact:
     apps_to_restart: "{{ apps_to_restart + [ 'blackbox-exporter' ] }}"
 
+- name: Set homeassistant to restart
+  set_fact:
+    apps_to_restart: "{{ apps_to_restart + [ 'homeassistant' ] }}"
+
 - name: Restart services
   docker_compose:
     project_name: Raspberry Media Server
@@ -50,3 +54,4 @@
     - Set pihole to restart
     - Set prometheus to restart
     - Set blackbox-exporter to restart
+    - Set homeassistant to restart
