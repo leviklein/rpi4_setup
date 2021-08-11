@@ -43,13 +43,14 @@ scrape_configs:
      module: [tcp_connect]
     static_configs:
       - targets:
-        - transmission:9091
+        - transmission-openvpn:9091
         - radarr:7878
         - sonarr:8989
         - jackett:9117
         - bazarr:6767
         - grafana:3000
         - pihole:80
+        - plex:32400
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target

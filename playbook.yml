@@ -31,7 +31,7 @@
     # - name: Install Node Exporter
     #   include_tasks: ./tasks/install_node_exporter.yml
     #   vars:
-    #     node_exporter_version: "1.0.1"
+    #     node_exporter_version: "1.2.2"
 
     - name: Run Docker applications
       include_tasks: ./tasks/run_docker_compose.yml
@@ -52,6 +52,10 @@
         timeout: 10
       listen:
         - Run Docker Compose
+
+    - name: Reboot system
+      reboot:
+      become: true
 
     - import_tasks: handlers/stop_services.yml
     - import_tasks: handlers/restart_services.yml

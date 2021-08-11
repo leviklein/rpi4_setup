@@ -37,6 +37,7 @@
     src: ./config/docker-compose.yml
     dest: ~/.ansible/compose/
   notify: Run Docker Compose
+  # changed_when: True
 
 - meta: flush_handlers # run compose if needed
 

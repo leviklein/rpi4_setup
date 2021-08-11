@@ -17,22 +17,22 @@ services:
       - /mnt/hdd1/Video/tv_series:/media/TV Shows
     restart: unless-stopped
 
-  transmission:
-    image: linuxserver/transmission
-    container_name: transmission
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Manila
-      - TRANSMISSION_WEB_HOME=/combustion-release/ #options: /combustion-release/, /kettu/, /transmission-web-control/
-    volumes:
-      - /mnt/hdd1/.transmission/config:/config
-      - /mnt/hdd1/torrent_temp:/Downloads
-      - /mnt/hdd1/.transmission/watch:/watch
-    ports:
-      - 51413:51413/tcp
-      - 51413:51413/udp
-    restart: unless-stopped
+  # transmission:
+  #   image: linuxserver/transmission
+  #   container_name: transmission
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Asia/Manila
+  #     - TRANSMISSION_WEB_HOME=/combustion-release/ #options: /combustion-release/, /kettu/, /transmission-web-control/
+  #   volumes:
+  #     - /mnt/hdd1/.transmission/config:/config
+  #     - /mnt/hdd1/torrent_temp:/Downloads
+  #     - /mnt/hdd1/.transmission/watch:/watch
+  #   ports:
+  #     - 51413:51413/tcp
+  #     - 51413:51413/udp
+  #   restart: unless-stopped
 
   nginx:
     image: nginx
@@ -124,10 +124,10 @@ services:
   #     - /dev/snd:/dev/snd
   #   restart: unless-stopped
 
-  nettools:
-    image: levikleinm/alpine-nettools
-    container_name: nettools
-    restart: unless-stopped
+  # nettools:
+  #   image: levikleinm/alpine-nettools
+  #   container_name: nettools
+  #   restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:latest
