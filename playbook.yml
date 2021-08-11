@@ -26,7 +26,7 @@
     #   when: try_run_docker is failed
 
     # - name: Mount ntfs hdd
-    #   include_tasks: ./tasks/mount_ntfs.yml
+    #   include_tasks: ./tasks/mount_drives.yml
 
     # - name: Install Node Exporter
     #   include_tasks: ./tasks/install_node_exporter.yml

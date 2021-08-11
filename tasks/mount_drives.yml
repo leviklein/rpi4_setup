@@ -1,0 +1,9 @@
+- name: Mount ntfs drives
+  include: mount_ntfs.yml
+  loop: "{{ drives }}"
+  when: item.filesystem == 'ntfs'
+
+- name: Mount non-ntfs drives
+  include: mount_drives_generic.yml
+  loop: "{{ drives }}"
+  when: item.filesystem != 'ntfs'

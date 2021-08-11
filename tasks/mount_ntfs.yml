@@ -6,7 +6,7 @@
 
 - name: Create a disk mount directory
   file:
-    path: /mnt/hdd1
+    path: "{{ item.path }}"
     state: directory
     mode: '0755'
     owner: "{{ ansible_user }}"
@@ -19,15 +19,9 @@
 
 - name: Add entry in /etc/fstab
   mount:
-    path: /mnt/hdd1
-    src: UUID=48C63F51C63F3F0E
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
     fstype: ntfs-3g
-    state: present
+    state: mounted
     opts: uid=pi,gid=pi,dmask=022,fmask=133, exec
   become: true
-  register: edit_fstab
-
-- name: Reboot the system
-  reboot:
-  become: true
-  when: edit_fstab.changed

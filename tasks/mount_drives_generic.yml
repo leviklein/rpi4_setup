@@ -1,0 +1,17 @@
+- name: Create a disk mount directory
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+
+- name: Add entry in /etc/fstab
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: "{{ item.filesystem }}"
+    state: mounted
+    opts: defaults,auto,users,rw,exec,nofail,x-systemd.device-timeout=30
+  become: true
