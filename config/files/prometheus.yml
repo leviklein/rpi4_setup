@@ -43,7 +43,7 @@ scrape_configs:
      module: [tcp_connect]
     static_configs:
       - targets:
-        - transmission-openvpn:9091
+        - transmission:9091
         - radarr:7878
         - sonarr:8989
         - jackett:9117
@@ -58,4 +58,3 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: blackbox-exporter:9115
-      

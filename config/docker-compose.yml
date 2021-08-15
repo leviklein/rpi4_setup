@@ -17,23 +17,6 @@ services:
       - /mnt/hdd1/Video/tv_series:/media/TV Shows
     restart: unless-stopped
 
-  # transmission:
-  #   image: linuxserver/transmission
-  #   container_name: transmission
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=Asia/Manila
-  #     - TRANSMISSION_WEB_HOME=/combustion-release/ #options: /combustion-release/, /kettu/, /transmission-web-control/
-  #   volumes:
-  #     - /mnt/hdd1/.transmission/config:/config
-  #     - /mnt/hdd1/torrent_temp:/Downloads
-  #     - /mnt/hdd1/.transmission/watch:/watch
-  #   ports:
-  #     - 51413:51413/tcp
-  #     - 51413:51413/udp
-  #   restart: unless-stopped
-
   nginx:
     image: nginx
     container_name: nginx
@@ -177,9 +160,9 @@ services:
     network_mode: host
     restart: unless-stopped
 
-  transmission-openvpn:
+  transmission:
     image: haugene/transmission-openvpn
-    container_name: transmission-openvpn
+    container_name: transmission
     ports:
       - '9091:9091'
     cap_add:
@@ -200,7 +183,7 @@ services:
         - PUID=1000
         - PGID=1000
         - TZ=Asia/Manila
-        - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
+        - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60 --pull-filter ignore ping
         - TRANSMISSION_WEB_UI=combustion
     logging:
         driver: json-file
